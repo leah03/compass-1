@@ -1,0 +1,3383 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "No description",
+    "version" : "1.0.0",
+    "title" : "Compass",
+    "contact" : { }
+  },
+  "host" : "10.145.89.151",
+  "basePath" : "/api",
+  "tags" : [ {
+    "name" : "Default",
+    "description" : "Default section"
+  }, {
+    "name" : "users"
+  }, {
+    "name" : "adapters"
+  }, {
+    "name" : "host"
+  }, {
+    "name" : "machines"
+  }, {
+    "name" : "switches"
+  }, {
+    "name" : "clusters"
+  }, {
+    "name" : "proxy"
+  }, {
+    "name" : "permissions"
+  }, {
+    "name" : "hosts"
+  }, {
+    "name" : "flavors"
+  }, {
+    "name" : "switchbatch"
+  }, {
+    "name" : "host-networks"
+  }, {
+    "name" : "subnets"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/adapters" : {
+      "get" : {
+        "tags" : [ "adapters" ],
+        "summary" : "Lists information for all adapters",
+        "description" : "Lists information for all adapters",
+        "operationId" : "getAdapters",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[{\n    \"flavors\": [\n        {\n            \"roles\": [\n                {\n                    \"display_name\": \"all in one compute\",\n                    \"description\": \"all in one compute\",\n                    \"adapter_id\": 3,\n                    \"role_id\": 35,\n                    \"flavor_id\": 4,\n                    \"optional\": true,\n                    \"id\": 35,\n                    \"name\": \"allinone-compute\"\n                }\n            ],\n            \"display_name\": \"All-In-One\",\n            \"id\": 4,\n            \"template\": \"allinone.tmpl\",\n            \"name\": \"allinone\"\n        },\n    ],\n    \"package_installer\": {\n        \"id\": 1,\n        \"alias\": \"chef_installer\",\n        \"name\": \"chef_installer\",\n        \"settings\": {\n            \"chef_server_ip\": \"10.145.88.211\",\n            \"client_name\": \"\",\n            \"chef_server_dns\": \"compass\",\n            \"databags\": [],\n            \"chef_url\": \"https://10.145.88.211\",\n            \"key_dir\": \"\"\n        }\n    },\n    \"name\": \"openstack_icehouse\",\n    \"os_installer\": {\n        \"id\": 1,\n        \"alias\": \"cobbler\",\n        \"name\": \"cobbler\",\n        \"settings\": {\n            \"credentials\": {\n                \"username\": \"cobbler\",\n                \"password\": \"cobbler\"\n            },\n            \"cobbler_url\": \"http://10.145.88.211/cobbler_api\"\n        }\n    },\n    \"supported_oses\": [\n        {\n            \"os_id\": 1,\n            \"id\": 1,\n            \"name\": \"Ubuntu-12.04-x86_64\"\n        },\n        {\n            \"os_id\": 2,\n            \"id\": 2,\n            \"name\": \"CentOS-6.5-x86_64\"\n        }\n    ],\n    \"display_name\": \"OpenStack Icehouse\",\n    \"id\": 3\n}]\n"
+            }
+          }
+        }
+      }
+    },
+    "/adapters/{id}" : {
+      "get" : {
+        "tags" : [ "adapters" ],
+        "summary" : "Lists information for a specified adapter",
+        "description" : "Lists information for a specified adapter",
+        "operationId" : "getAdaptersId",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"id\" : 1,\n    \"name\": \"openstack\",\n    \"display\": \"OpenStack\",\n    \"os_installer\": \"cobbler\",\n    \"package_installer\": \"chef\",\n    \"roles\": [   {  \"display_name\": \"compute\", \n                           \"name\": \"os-compute-worker\"\n                        },\n                        { \"display_name\": \"controller\", \n                          \"name\": \"os-controller\"\n                        },\n                        { \"display_name\": \"network\",\n                          \"name\": \"os-network\"\n                        },\n                        { \"display_name\": \"storage\",\n                          \"name\": \"os-block-storage-worker\"\n                    ],\n    \"compatible_os\": [\n           {\n                 \"name\": \"CentOs\", \n                 \"os_id\": 1\n           },\n           {\n                 \"name\": \"Ubuntu\",\n                 \"os_id\": 2\n           }\n    ]\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"The adapter with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/adapters/{id}/oses/{os_id}/metadata" : {
+      "get" : {
+        "tags" : [ "adapters" ],
+        "summary" : "Lists config formats for a specified adapter and os",
+        "description" : "Lists config formats for a specified adapter and os",
+        "operationId" : "getAdaptersIdOsesOs_idMetadata",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "os_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"package_config\": {\n        \"security\": {\n            \"_self\": {\n                \"mapping_to\": \"\",\n                \"description\": null,\n                \"required_in_whole_config\": true,\n                \"display_type\": null,\n                \"js_validator\": null,\n                \"default_value\": null,\n                \"field_type\": \"dict\",\n                \"name\": \"security\",\n                \"required_in_options\": false,\n                \"is_required\": false,\n                \"options\": null\n            },\n    },\n    \"os_config\": {\n         \"server_credentials\": {\n            \"_self\": {\n                \"mapping_to\": \"server_credentials\",\n                \"description\": null,\n                \"required_in_whole_config\": true,\n                \"display_type\": null,\n                \"js_validator\": null,\n                \"default_value\": null,\n                \"field_type\": \"dict\",\n                \"name\": \"server_credentials\",\n                \"required_in_options\": false,\n                \"is_required\": false,\n                \"options\": null\n            },\n            \"username\": {\n                \"_self\": {\n                    \"mapping_to\": \"username\",\n                    \"description\": \"username\",\n                    \"required_in_whole_config\": false,\n                    \"display_type\": \"text\",\n                    \"js_validator\": null,\n                    \"default_value\": \"root\",\n                    \"field_type\": \"basestring\",\n                    \"name\": \"username\",\n                    \"required_in_options\": false,\n                    \"is_required\": true,\n                    \"options\": null\n                }\n            },\n        },       \n    },\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"The adapter with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/adapters/{id}/oses/{os_id}/ui_metadata" : {
+      "get" : {
+        "tags" : [ "adapters" ],
+        "summary" : "List specified os ui metadata.",
+        "description" : "List specified os ui metadata.",
+        "operationId" : "getAdaptersIdOsesOs_idUi_metadata",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "os_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"os_global_config\": [\n    {\n      \"title\": \"Server Credentials\",\n      \"data\": [\n        {\n          \"default_value\": \"root\",\n          \"display_name\": \"User name\",\n          \"name\": \"username\",\n          \"display_type\": \"text\",\n          \"is_required\": \"true\",\n          \"placeholder\": \"Username\",\n          \"order\": 1\n        },\n        {\n          \"display_name\": \"Confirm Password\",\n          \"name\": \"confirmPassword\",\n          \"datamatch\": \"password\",\n          \"display_type\": \"password\",\n          \"is_required\": \"true\",\n          \"placeholder\": \"Confirm Password\",\n          \"order\": 3\n        },\n        {\n          \"display_name\": \"Password\",\n          \"name\": \"password\",\n          \"display_type\": \"password\",\n          \"is_required\": \"true\",\n          \"placeholder\": \"Password\",\n          \"order\": 2\n        }],\n      \"order\": 2,\n      \"name\": \"server_credentials\"\n      },\n    }\n  }]\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"os <os_id> does not exist\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Lists all information for all clusters",
+        "description" : "Lists all information for all clusters",
+        "operationId" : "getClusters",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "os_name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "owner",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "adapter_name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "flavor_name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n    {\n        \"created_at\": \"2014-10-18 23:01:23\",\n        \"os_name\": \"CentOS-6.5-x86_64\",\n        \"name\": \"cluster1\",\n        \"reinstall_distributed_system\": true,\n        \"adapter_id\": 3,\n        \"updated_at\": \"2014-10-18 23:01:23\",\n        \"owner\": \"admin@huawei.com\",\n        \"os_id\": 2,\n        \"distributed_system_installed\": false,\n        \"flavor\": {\n            \"display_name\": \"All-In-One\",\n            \"name\": \"allinone\",\n            \"roles\": [\n                {\n                    \"display_name\": \"all in one compute\",\n                    \"description\": \"all in one compute\",\n                    \"adapter_id\": 3,\n                    \"role_id\": 35,\n                    \"flavor_id\": 4,\n                    \"optional\": true,\n                    \"id\": 35,\n                    \"name\": \"allinone-compute\"\n                }\n            ],\n            \"adapter_id\": 3,\n            \"template\": \"allinone.tmpl\",\n            \"id\": 4\n        },\n        \"id\": 1\n    }\n]\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Creates a new cluster",
+        "description" : "Creates a new cluster",
+        "operationId" : "postClusters",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The request has been fulfilled and resulted in a new resource being created",
+            "examples" : {
+              "application/json" : "{\n    \"created_at\": \"2014-10-18 23:01:23\",\n    \"os_name\": \"CentOS-6.5-x86_64\",\n    \"name\": \"cluster1\",\n    \"reinstall_distributed_system\": true,\n    \"adapter_id\": 3,\n    \"updated_at\": \"2014-10-18 23:01:23\",\n    \"owner\": \"admin@huawei.com\",\n    \"os_id\": 2,\n    \"distributed_system_installed\": false,\n    \"flavor\": {\n      \"display_name\": \"All-In-One\",\n      \"name\": \"allinone\",\n      \"roles\": [\n        {\n          \"display_name\": \"all in one compute\",\n          \"description\": \"all in one compute\",\n          \"adapter_id\": 3,\n          \"role_id\": 35,\n          \"flavor_id\": 4,\n          \"optional\": true,\n          \"id\": 35,\n          \"name\": \"allinone-compute\"\n        }\n       ],\n      \"adapter_id\": 3,\n      \"template\": \"allinone.tmpl\",\n      \"id\": 4\n    },\n    \"id\": 1\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster with name 'cluster_01' already exists!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Lists information for a specified cluster",
+        "description" : "Lists information for a specified cluster",
+        "operationId" : "getClustersCluster_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n   \"created_at\": \"2014-10-18 23:01:23\",\n   \"os_name\": \"CentOS-6.5-x86_64\",\n   \"name\": \"cluster1\",\n   \"reinstall_distributed_system\": true,\n   \"adapter_id\": 3,\n   \"updated_at\": \"2014-10-18 23:01:23\",\n   \"owner\": \"admin@huawei.com\",\n   \"os_id\": 2,\n   \"distributed_system_installed\": false,\n   \"flavor\": {\n       \"display_name\": \"All-In-One\",\n       \"name\": \"allinone\",\n       \"roles\": [\n           {\n               \"display_name\": \"all in one compute\",\n               \"description\": \"all in one compute\",\n               \"adapter_id\": 3,\n               \"role_id\": 35,\n               \"flavor_id\": 4,\n               \"optional\": true,\n               \"id\": 35,\n               \"name\": \"allinone-compute\"\n           }\n       ],\n       \"adapter_id\": 3,\n       \"template\": \"allinone.tmpl\",\n       \"id\": 4\n   },\n   \"id\": 1\n }\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "clusters" ],
+        "summary" : "set properties of cluster",
+        "description" : "set properties of cluster",
+        "operationId" : "putClustersCluster_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"created_at\": \"2014-10-18 23:16:02\",\n  \"os_name\": \"CentOS-6.5-x86_64\",\n  \"name\": \"cluster_new\",\n  \"reinstall_distributed_system\": true,\n  \"adapter_id\": 3,\n  \"updated_at\": \"2014-10-18 23:16:39\",\n  \"owner\": \"admin@huawei.com\",\n  \"os_id\": 2,\n  \"distributed_system_installed\": false,\n  \"flavor\": {\n    \"display_name\": \"All-In-One\",\n    \"name\": \"allinone\",\n    \"roles\": [\n      {\n        \"display_name\": \"all in one compute\",\n        \"description\": \"all in one compute\",\n        \"adapter_id\": 3,\n        \"role_id\": 35,\n        \"flavor_id\": 4,\n        \"optional\": true,\n        \"id\": 35,\n        \"name\": \"allinone-compute\"\n      }\n    ],\n    \"adapter_id\": 3,\n    \"template\": \"allinone.tmpl\",\n    \"id\": 4\n  },\n  \"id\": 2\n}\n"
+            }
+          },
+          "400" : {
+            "description" : "The request could not be understood by the server due to malformed syntax",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster <cluster_id> not found\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Deletes a specific cluster before deploy (admin, owner only). Hosts will be still kept even cluster(s) is deleted.",
+        "description" : "Deletes a specific cluster before deploy (admin, owner only). Hosts will be still kept even cluster(s) is deleted.",
+        "operationId" : "deleteClustersCluster_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"created_at\": \"2014-10-18 23:01:23\",\n    \"os_name\": \"CentOS-6.5-x86_64\",\n    \"name\": \"cluster1\",\n    \"reinstall_distributed_system\": true,\n    \"adapter_id\": 3,\n    \"updated_at\": \"2014-10-18 23:01:23\",\n    \"owner\": \"admin@huawei.com\",\n    \"os_id\": 2,\n    \"distributed_system_installed\": false,\n    \"flavor\": {\n        \"display_name\": \"All-In-One\",\n        \"name\": \"allinone\",\n        \"roles\": [\n            {\n                \"display_name\": \"all in one compute\",\n                \"description\": \"all in one compute\",\n                \"adapter_id\": 3,\n                \"role_id\": 35,\n                \"flavor_id\": 4,\n                \"optional\": true,\n                \"id\": 35,\n                \"name\": \"allinone-compute\"\n            }\n        ],\n        \"adapter_id\": 3,\n        \"template\": \"allinone.tmpl\",\n        \"id\": 4\n    },\n    \"id\": 1\n}\n"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster has been deployed or is being installed. Not allowed to delete it now!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/action" : {
+      "post" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Takes an action for a specific cluster",
+        "description" : "Takes an action for a specific cluster",
+        "operationId" : "postClustersCluster_idAction",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"hosts\":  [\n    {    \n          \"id\" : 5,\n          \"machine_id\": 10\n    },\n    {    \n          \"id\" : 6,\n          \"machine_id\": 11\n    },\n    {    \n          \"id\" : 7,\n          \"machine_id\": 12\n    }\n  ]\n}\n  \nOR\n  \n{\n  \"hosts\":  [\n    {    \n      \"id\" : 1,\n      \"machine_id\": 13\n    },\n    {    \n      \"id\" : 2,\n      \"machine_id\": 14\n    },\n    {    \n      \"id\" : 3,\n      \"machine_id\": 15\n    }\n   ]\n}\n  \nOR\n  \n{\n   \"hosts\": [\n     {\n        \"id\" : 1,\n        \"machine_id\": 13\n     }\n   ]\n}\n  \nOR\n{\n  \"hosts\":  [\n      {    \n        \"id\" : 1,\n        \"machine_id\": 10\n      },\n      {    \n        \"id\" : 2,\n        \"machine_id\": 11\n      },\n      {    \n        \"id\" : 3,\n        \"machine_id\": 12\n      }\n  ]\n}\n\nOR\n  \n{\n  \"cluster\": {\"id\": 1},\n  \"hosts\": [{\"id\": 1}, {\"id\": 2}, {\"id\": 3}]\n}\n  \nOR\n  \n{\n  \"status\": \"deploy action sent\",\n  \"cluster\": {\n      \"id\": 1,\n   },\n   \"hosts\": [\n      {\n         \"id\": 3\n      }\n   ]\n}\n  \n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/config" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Gets config information for a specified cluster",
+        "description" : "Gets config information for a specified cluster",
+        "operationId" : "getClustersCluster_idConfig",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"package_config\": {\n     },\n     \"os_config\": {\n     }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "clusters" ],
+        "summary" : "set properties in cluster config",
+        "description" : "set properties in cluster config",
+        "operationId" : "putClustersCluster_idConfig",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"os_config”:  {\n    \"general”: {\n       \"language\": \"EN\",\n       \"timezone\": \"PDT\",\n       \"domain\": \"xxx\",\n       \"default_gateway\": \"10.0.0.1\"\n  },\n  \"server_crendentials\": {\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n  },\n  \"partition\": {\n     \"/var\" : {\n      \"max_size\": \"20\",\n         \"size_percentage\": \"20\",\n      },\n    }\n  }\n\n{\n  \"package_config\": { \n    \"network_mapping\": {\n       \"management\": {\n               \"interface\": \"eth0\"\n        },\n       \"tenant\": {\n               \"interface\": \"eth1\"\n       },\n       \"storage\": {\n                 \"interface\":\"eth2\"\n       },\n       \"public\": {\n                 \"interface\": \"eth3\"\n       }\n    }\n  }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "clusters" ],
+        "summary" : "delete cluster config",
+        "description" : "delete cluster config",
+        "operationId" : "deleteClustersCluster_idConfig",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"package_config\":{\n    \"security\": {\n      \"service_crendentials\": {\n        \"image\": {\n           \"username\": \"admin\",\n           \"password\": \"admin\"\n        },\n        ...\n      }\n    }\n  }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "clusters" ],
+        "summary" : "update properties in cluster config",
+        "description" : "update properties in cluster config",
+        "operationId" : "patchClustersCluster_idConfig",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n   \"package_config\":{\n       \"security\": {\n           \"service_crendentials\": {\n             \"image\": {\n               \"username\": \"admin\",\n               \"password\": \"admin\"\n             },\n             ...\n           },\n           \"dashboard_credentials\":{\n              \"username\": \"root\",\n              \"password\": \"admin\"\n           }\n        }\n     }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/hosts" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Gets the information of the hosts belonging to this cluster",
+        "description" : "Gets the information of the hosts belonging to this cluster",
+        "operationId" : "getClustersCluster_idHosts",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n  {    \n    \"id\" : 1,\n    \"name\": \"host_01\",\n    \"dns\": \"xxx\",\n    \"os\": \"Centos\",\n    \"mac\": \"---MAC-address---\",\n    \"machine_id\": 1,\n    \"os_installed\": true,\n  },\n  …...          \n]\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "clusters" ],
+        "summary" : "add host to a cluster",
+        "description" : "add host to a cluster",
+        "operationId" : "postClustersCluster_idHosts",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"os_installer\": {\n        \"id\": 1,\n        \"alias\": \"cobbler\",\n        \"name\": \"cobbler\",\n        \"settings\": {\n            \"credentials\": {\n                \"username\": \"cobbler\",\n                \"password\": \"cobbler\"\n            },\n            \"cobbler_url\": \"http://10.145.88.211/cobbler_api\"\n        }\n    },\n    \"ip\": null,\n    \"clusterhost_id\": 2,\n    \"updated_at\": \"2014-10-18 23:47:47\",\n    \"switches\": [\n        {\n            \"switch_ip\": \"172.29.8.40\",\n            \"vlans\": [\n                88\n            ],\n            \"port\": \"4\"\n        }\n    ],\n    \"os_installed\": false,\n    \"tag\": {},\n    \"cluster_id\": 2,\n    \"id\": 2,\n    \"switch_ip\": \"172.29.8.40\",\n    \"networks\": {\n     },\n    \"hostname\": null,\n    \"reinstall_os\": true,\n    \"owner\": \"admin@huawei.com\",\n    \"port\": \"4\",\n    \"location\": {},\n    \"os_name\": \"CentOS-6.5-x86_64\",\n    \"reinstall_distributed_system\": true,\n    \"mac\": \"00:0c:29:2b:c9:d4\",\n    \"host_id\": 2,\n    \"distributed_system_installed\": false,\n    \"name\": \"None.cluster_new\",\n    \"roles\": [],\n    \"clustername\": \"cluster_new\",\n    \"created_at\": \"2014-10-18 23:47:47\",\n    \"machine_id\": 2\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"host <host_id> already exists\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/hosts/{host_id}" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "get host of a cluster",
+        "description" : "get host of a cluster",
+        "operationId" : "getClustersCluster_idHostsHost_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{    \n    \"id\" : 1,\n    \"name\": \"host_01\",\n    \"dns\": \"xxx\",\n    \"os\": \"Centos\",\n    \"mac\": \"---MAC-address---\",\n    \"machine_id\": 1,\n    \"os_installed\": true,\n    \"links\": [\n           {\n                 \"href\" : \"/hosts/1\",\n                 \"rel\": \"self\"\n           },\n           {\n                 \"href\": \"/clusters/1/hosts/1/config\",\n                 \"rel\": \"host package config\"\n           }\n     ]\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "clusters" ],
+        "summary" : "set host properties of a cluster",
+        "description" : "set host properties of a cluster",
+        "operationId" : "putClustersCluster_idHostsHost_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"os_installer\": {\n        \"id\": 1,\n        \"alias\": \"cobbler\",\n        \"name\": \"cobbler\",\n        \"settings\": {\n            \"credentials\": {\n                \"username\": \"cobbler\",\n                \"password\": \"cobbler\"\n            },\n            \"cobbler_url\": \"http://10.145.88.211/cobbler_api\"\n        }\n    },\n    \"ip\": null,\n    \"clusterhost_id\": 2,\n    \"updated_at\": \"2014-10-19 00:10:43\",\n    \"switches\": [\n        {\n            \"switch_ip\": \"172.29.8.40\",\n            \"vlans\": [\n                88\n            ],\n            \"port\": \"4\"\n        }\n    ],\n    \"os_installed\": false,\n    \"tag\": {},\n    \"cluster_id\": 2,\n    \"id\": 2,\n    \"switch_ip\": \"172.29.8.40\",\n    \"networks\": {},\n    \"hostname\": null,\n    \"reinstall_os\": true,\n    \"owner\": \"admin@huawei.com\",\n    \"port\": \"4\",\n    \"location\": {},\n    \"os_name\": \"CentOS-6.5-x86_64\",\n    \"reinstall_distributed_system\": true,\n    \"mac\": \"00:0c:29:2b:c9:d4\",\n    \"host_id\": 2,\n    \"distributed_system_installed\": false,\n    \"name\": \"None.cluster_new\",\n    \"roles\": [\n        {\n            \"display_name\": \"all in one compute\",\n            \"description\": \"all in one compute\",\n            \"adapter_id\": 3,\n            \"optional\": true,\n            \"id\": 35,\n            \"name\": \"allinone-compute\"\n        }\n    ],\n    \"clustername\": \"cluster_new\",\n    \"created_at\": \"2014-10-18 23:47:47\",\n    \"machine_id\": 2\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "clusters" ],
+        "summary" : "delete host from a cluster",
+        "description" : "delete host from a cluster",
+        "operationId" : "deleteClustersCluster_idHostsHost_id",
+        "consumes" : [ ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "clusters" ],
+        "summary" : "update host properties of a cluster",
+        "description" : "update host properties of a cluster",
+        "operationId" : "patchClustersCluster_idHostsHost_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"os_installer\": {\n        \"id\": 1,\n        \"alias\": \"cobbler\",\n        \"name\": \"cobbler\",\n        \"settings\": {\n            \"credentials\": {\n                \"username\": \"cobbler\",\n                \"password\": \"cobbler\"\n            },\n            \"cobbler_url\": \"http://10.145.88.211/cobbler_api\"\n        }\n    },\n    \"ip\": null,\n    \"clusterhost_id\": 2,\n    \"updated_at\": \"2014-10-19 00:10:43\",\n    \"switches\": [\n        {\n            \"switch_ip\": \"172.29.8.40\",\n            \"vlans\": [\n                88\n            ],\n            \"port\": \"4\"\n        }\n    ],\n    \"os_installed\": false,\n    \"tag\": {},\n    \"cluster_id\": 2,\n    \"id\": 2,\n    \"switch_ip\": \"172.29.8.40\",\n    \"networks\": {},\n    \"hostname\": null,\n    \"reinstall_os\": true,\n    \"owner\": \"admin@huawei.com\",\n    \"port\": \"4\",\n    \"location\": {},\n    \"os_name\": \"CentOS-6.5-x86_64\",\n    \"reinstall_distributed_system\": true,\n    \"mac\": \"00:0c:29:2b:c9:d4\",\n    \"host_id\": 2,\n    \"distributed_system_installed\": false,\n    \"name\": \"None.cluster_new\",\n    \"roles\": [\n        {\n            \"display_name\": \"all in one compute\",\n            \"description\": \"all in one compute\",\n            \"adapter_id\": 3,\n            \"optional\": true,\n            \"id\": 35,\n            \"name\": \"allinone-compute\"\n        },\n        {\n            \"name\": \"new-role\",\n            ...\n        }\n    ],\n    \"clustername\": \"cluster_new\",\n    \"created_at\": \"2014-10-18 23:47:47\",\n    \"machine_id\": 2\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/hosts/{host_id}/config" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "get config of a host",
+        "description" : "get config of a host",
+        "operationId" : "getClustersCluster_idHostsHost_idConfig",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n      \"os_config\": {\n              ...\n      },\n      \"package_config\": {\n              ...\n      }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "clusters" ],
+        "summary" : "set host config",
+        "description" : "set host config",
+        "operationId" : "putClustersCluster_idHostsHost_idConfig",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  …..\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "clusters" ],
+        "summary" : "delete host config",
+        "description" : "delete host config",
+        "operationId" : "deleteClustersCluster_idHostsHost_idConfig",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"os_config\": {\n       ...//the same as PATCH cluster config\n  }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "clusters" ],
+        "summary" : "update host config",
+        "description" : "update host config",
+        "operationId" : "patchClustersCluster_idHostsHost_idConfig",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"os_config\": {\n        ...//the same as PATCH cluster config\n  }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/hosts/{host_id}/state" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "get host state of a cluster",
+        "description" : "get host state of a cluster",
+        "operationId" : "getClustersCluster_idHostsHost_idState",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"cluster_id\" : 1,\n  \"host_id\": 10\n  \"state\": \"INSTALLING\",\n  \"percentage\": 0.5,\n  \"severity\": \"INFO\",\n  \"message\": \"-----some--message-----\",\n  \"updated_at\": \"---timestamp---\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "clusters" ],
+        "summary" : "set host state properties of a cluster",
+        "description" : "set host state properties of a cluster",
+        "operationId" : "putClustersCluster_idHostsHost_idState",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"cluster_id\" : 1,\n  \"host_id\": 10\n  \"state\": \"SUCCESSFUL\",\n  \"percentage\": 1,\n  \"severity\": \"INFO\",\n  \"message\": \"-----some--message-----\",\n  \"updated_at\": \"---timestamp---\"\n}\nOR\n{\n  \"cluster_id\" : 1,\n  \"host_id\": 10\n  \"state\": \"ERROR\",\n  \"percentage\": 0.7,\n  \"severity\": \"ERROR\",\n  \"message\": \"---some-error-message---\",\n  \"updated_at\": \"---timestamp---\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/metadata" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "Get metadata of a specific cluster",
+        "description" : "Get metadata of a specific cluster",
+        "operationId" : "getClustersCluster_idMetadata",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"package_config\": {\n     },\n     \"os_config\": {\n     }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{cluster_id}/state" : {
+      "get" : {
+        "tags" : [ "clusters" ],
+        "summary" : "get cluster state",
+        "description" : "get cluster state",
+        "operationId" : "getClustersCluster_idState",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cluster_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"package_config\": {\n     },\n     \"os_config\": {\n     }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cluster with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/flavors" : { },
+    "/flavors/{flavor_id}/metadata" : {
+      "get" : {
+        "tags" : [ "flavors" ],
+        "summary" : "List specific flavor metadata.",
+        "description" : "List specific flavor metadata.",
+        "operationId" : "getFlavorsFlavor_idMetadata",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "flavor_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"flavor_config\": {\n    \"neutron_config\": {...},\n    \"security\": {...},\n    \"ha_proxy\": {...},\n    \"network_mapping\": {...}\n    \n  }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{message: \"flavor <flavor_id> does not exist\"}\n"
+            }
+          }
+        }
+      }
+    },
+    "/flavors/{flavor_id}/ui_metadata" : {
+      "get" : {
+        "tags" : [ "flavors" ],
+        "summary" : "List specific flavor ui metadata.",
+        "description" : "List specific flavor ui metadata.",
+        "operationId" : "getFlavorsFlavor_idUi_metadata",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "flavor_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"flavor_config\": \n    {\n      \"category\": \"service_credentials\",\n      \"modifiable_data\": [\n        \"username\",\n        \"password\",\n      ]\n      \"table_display_header\": [\n        \"Service\",\n        \"UserName\",\n        \"Password\",\n        \"Action\",\n      ]\n      \"accordion_heading\": \"OpenStack Database and Queue Credentials\",\n      \"action”: true,\n      \"data_structure\": \"table\"\n    },\n    {...},\n    {...}\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{message: \"flavor <flavor_id> does not exist\"}\n"
+            }
+          }
+        }
+      }
+    },
+    "/host-networks/{host_network_id}" : {
+      "put" : {
+        "tags" : [ "host-networks" ],
+        "summary" : "Update a specific host network info.",
+        "description" : "Update a specific host network info.",
+        "operationId" : "putHost-networksHost_network_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_network_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"ip\": \"192.168.100.159\",\n  \"created_at\": \"2015-04-17 14:55:55\",\n  \"is_promiscuous\": true,\n  \"updated_at: \"2015-04-17 14:55:55\",\n  \"netmask\": \"255.255.254.0\",\n  \"is_mgmt\": false,\n  \"interface\": \"eth1\",\n  \"id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  message: \"Cannot find the record in table HostNetwork: {'id': <host_network_id>}\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "host-networks" ],
+        "summary" : "Delete a host network.",
+        "description" : "Delete a host network.",
+        "operationId" : "deleteHost-networksHost_network_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_network_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"ip: \"10.145.89.155\",\n  \"created_at\": \"2015-04-17 15:44:54\"\n  \"is_promiscuous\": false,\n  \"updated_at\": \"2015-04-17 15:44:54\",\n  \"netmask\": \"255.255.254.0\",\n  \"is_mgmt\": false\n  \"interface\": \"eth0\",\n  \"id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  message: \"Cannot find the record in table HostNetwork: {'id': <host_network_id>}\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/host/networks" : {
+      "get" : {
+        "tags" : [ "host" ],
+        "summary" : "List all host networks",
+        "description" : "List all host networks",
+        "operationId" : "getHostNetworks",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"eth1\": {\n    \"ip\": \"192.168.100.155\",\n    \"created_at\": \"2015-04-17 14:55:55\",\n    \"is_promiscuous\": true,\n    \"updated_at\": \"2015-04-17 14:55:55\",\n    \"netmask\": \"255.255.254.0\",\n    \"is_mgmt\": false,\n    \"interface\": \"eth1\",  \n    \"id\": 1\n  },\n  \"eth0\": {\n    \"ip\": \"10.145.89.155\",\n    \"created_at\": \"2015-04-17 14:55:55\",\n    \"is_promiscuous\": false,\n    \"updated_at\": \"2015-04-17 14:55:55\",\n    \"netmask\": \"255.255.254.0\",\n    \"is_mgmt\": true,\n    \"interface\": \"eth0\",\n    \"id\": 2\n    }\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/host/networks/{host_network_id}" : {
+      "get" : {
+        "tags" : [ "host" ],
+        "summary" : "List specifig host network info",
+        "description" : "List specifig host network info",
+        "operationId" : "getHostNetworksHost_network_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_network_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"ip\": \"192.168.100.155\",\n  \"created_at\": \"2015-04-17 14:55:55\",\n  \"is_promiscuous\": true,\n  \"updated_at: \"2015-04-17 14:55:55\",\n  \"netmask\": \"255.255.254.0\",\n  \"is_mgmt\": false,\n  \"interface\": \"eth1\",\n  \"id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cannot find the record in table HostNetwork: {'id': <host_network_id>}\",\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Lists information for all hosts",
+        "description" : "Lists information for all hosts",
+        "operationId" : "getHosts",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "os_name",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "owner",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "mac",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n  {\n    \"id” : 1,\n    \"name\": \"host_01\",\n    \"machine_id\": 1,\n    \"mac\": \"---MAC-address--\",\n    \"ip\": \"192.168.1.2\",\n    \"os\": \"CentOS\",\n    \"os_installed\": false,\n    \"clusters\": [\"cluster_01\"],\n    \"created_by\": \"user1@email.com\",\n    \"created_at\": \"---timestamp---\",\n    \"updated_at\": \"---timestamp---\",\n    \"links”: [\n            {\n             \"href\" : \"/hosts/1\",\n             \"rel\": \"self\n       }\n    ]\n   },\n  ...\n]\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts/{host_id}" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Lists information for a specified host",
+        "description" : "Lists information for a specified host",
+        "operationId" : "getHostsHost_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"id\" : 1,\n  \"name\": \"host_01\",\n  \"machine_id\": 1,\n  \"mac\": \"---MAC-address--”,\n  \"ip\": \"192.168.1.2\"\n  \"os\": \"CentOs\",\n  \"os_installed\": false,\n  \"domain\": \"xxx\",\n  \"dns\": \"xxx\",\n  \"created_by\": \"user1@email.com\",\n  \"created_at\": \"---timestamp---\",\n  \"updated_at\": \"---timestamp---\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "hosts" ],
+        "summary" : "set host properties.",
+        "description" : "set host properties.",
+        "operationId" : "putHostsHost_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n   \"id\" : 1,\n   \"name\": \"host1\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Deletes a host (admin only). The host must be not in any cluster.",
+        "description" : "Deletes a host (admin only). The host must be not in any cluster.",
+        "operationId" : "deleteHostsHost_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n \"id\" : 1,\n \"name\": \"host_01_new\",\n \"mac\": \"---MAC-address--\",\n \"os_name\": \"CentOs\",\n \"os_installed\": false\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"type\": \"itemNotFound\",\n   \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts/{host_id}/action" : {
+      "post" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Poweron, poweroff, reset this host by IPMI",
+        "description" : "Poweron, poweroff, reset this host by IPMI",
+        "operationId" : "postHostsHost_idAction",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n   \"status\": \"host <host_id> power<on|off|reset> action sent\",\n   \"host\": {...}\n}\n"
+            }
+          },
+          "400" : {
+            "description" : "The request could not be understood by the server due to malformed syntax",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"The host didnot set IPMI info!\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"The host witch ID '$host_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts/{host_id}/clusters" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Lists clusters which the host belongs to",
+        "description" : "Lists clusters which the host belongs to",
+        "operationId" : "getHostsHost_idClusters",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n  {\n    \"os_name\": \"CentOS-6.5-x86_64\",\n    \"name\": \"cluster_new\",\n    \"reinstall_distributed_system\": true,\n    \"created_at\": \"2014-10-18 23:16:02\",\n    \"adapter_id\": 3,\n    \"updated_at\": \"2014-10-18 23:16:39\",\n    \"owner\": \"admin@huawei.com\",\n    \"distributed_system_installed\": false,\n    \"id\": 2\n  }\n]\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts/{host_id}/config" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Lists config information for a specified host",
+        "description" : "Lists config information for a specified host",
+        "operationId" : "getHostsHost_idConfig",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n   \"os_config\": {\n       \"global\": {\n         \"language\": \"EN\",\n         \"timezone\": \"PDT\",\n       }\n       \"partition\": {\n          \"/var\": {\n                \"max_size\": \"20\",\n                \"size_percentage\": \"30\"\n          },\n         \"/home\": {\n                \"max_size\": \"20\",\n                \"size_percentage\": \"40\"\n         }\n       }\n    }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "hosts" ],
+        "summary" : "set config properties for a specified host",
+        "description" : "set config properties for a specified host",
+        "operationId" : "putHostsHost_idConfig",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"os_config\": {\n      …\n  }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "hosts" ],
+        "summary" : "delete host config",
+        "description" : "delete host config",
+        "operationId" : "deleteHostsHost_idConfig",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n   \"os_config\": {\n      ...\n   }\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "hosts" ],
+        "summary" : "update host config properties",
+        "description" : "update host config properties",
+        "operationId" : "patchHostsHost_idConfig",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  ....\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts/{host_id}/network" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Lists network info for a specified host",
+        "description" : "Lists network info for a specified host",
+        "operationId" : "getHostsHost_idNetwork",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"eth0\":  {\n      \"id\": 1,\n      \"interface\": \"eth0\",\n      \"ip\": \"192.168.10.1\",\n      \"is_mgmt\": true,\n      \"is_promiscuous\": false,\n      \"subnet_id\": 1,\n  },\n  \"eth1\":  {\n       \"id\": 2,\n       \"interface\": \"eth1\",\n       \"ip\": \"10.12.123.1\",\n       \"is_promiscuous\": true,\n       \"subnet_id\": 2,\n  },\n  …..\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Creates an interface config entry",
+        "description" : "Creates an interface config entry",
+        "operationId" : "postHostsHost_idNetwork",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"id\": 3,\n  \"interface\": \"eth3\",\n  \"ip\": \"12.140.10.1\",\n  \"is_promiscuous\": true,\n  \"is_mgmt\": false,\n  \"subnet_id\": 3,\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id ‘some_id’ cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts/{host_id}/network/{interface}" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "list host network information",
+        "description" : "list host network information",
+        "operationId" : "getHostsHost_idNetworkInterface",
+        "consumes" : [ ],
+        "produces" : [ ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "interface",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "hosts" ],
+        "summary" : "set host network properties",
+        "description" : "set host network properties",
+        "operationId" : "putHostsHost_idNetworkInterface",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "interface",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"id\": 3,\n  \"interface\": \"eth3\",\n  \"ip\": \"12.140.10.2\",\n  \"is_promiscuous\": true,\n  \"is_mgmt\": false,\n  \"subnet_id\": 4,\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "hosts" ],
+        "summary" : "delete a host network",
+        "description" : "delete a host network",
+        "operationId" : "deleteHostsHost_idNetworkInterface",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "interface",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"id\": 3,\n  \"interface\": \"eth3\",\n  \"ip\": \"12.140.10.1\",\n  \"is_promiscuous”: true,\n  \"is_mgmt\": false,\n  \"subnet_id\": 3\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/hosts/{host_id}/state" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "get host state",
+        "description" : "get host state",
+        "operationId" : "getHostsHost_idState",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"state\": \"INSTALLING\",\n  \"percentage\": 0.5,\n  \"severity\": \"INFO\",\n  \"message\": \"-----some--message-----\",\n  \"updated_at\": \"---timestamp---\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "hosts" ],
+        "summary" : "set host state properties",
+        "description" : "set host state properties",
+        "operationId" : "putHostsHost_idState",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "host_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"cluster_id\" : 1,\n  \"host_id\": 10\n  \"state\": \"SUCCESSFUL\",\n  \"percentage\": 1,\n  \"severity\": \"INFO\",\n  \"message\": \"-----some--message-----\",\n  \"updated_at\": \"---timestamp---\"\n}\n\nOR\n\n{\n  \"cluster_id\" : 1,\n  \"host_id\": 10\n  \"state\": \"ERROR\",\n  \"percentage\": 0.7,\n  \"severity\": \"ERROR\",\n  \"message\": \"---some-error-message---\",\n  \"updated_at\": \"---timestamp---\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \" Host with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/machines" : {
+      "get" : {
+        "tags" : [ "machines" ],
+        "summary" : "Lists machines",
+        "description" : "Lists machines",
+        "operationId" : "getMachines",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "mac",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tag",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "location",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n    {\n        \"created_at\": \"2014-10-17 17:40:13\",\n        \"updated_at\": \"2014-10-17 23:22:53\",\n        \"switches\": [],\n        \"mac\": \"28:6e:d4:46:c4:25\",\n        \"tag\": {},\n        \"location\": {\n            \"building\": \"E5\",\n            \"city\": \"beijing\"\n        },\n        \"ipmi_credentials\": {},\n        \"id\": 1\n    },\n]\n"
+            }
+          }
+        }
+      }
+    },
+    "/machines/{machine_id}" : {
+      "get" : {
+        "tags" : [ "machines" ],
+        "summary" : "Lists machines of a specific machine",
+        "description" : "Lists machines of a specific machine",
+        "operationId" : "getMachinesMachine_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"created_at\": \"2014-10-17 17:40:13\",\n  \"updated_at\": \"2014-10-17 23:22:53\",\n  \"switches\": [],\n  \"mac\": \"28:6e:d4:46:c4:25\",\n  \"tag\": {},\n  \"location\": {\n      \"building\": \"E5\",\n      \"city\": \"beijing\"\n  },\n  \"ipmi_credentials\": {},\n  \"id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"The machine witch ID '$machine_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "machines" ],
+        "summary" : "set machine properties",
+        "description" : "set machine properties",
+        "operationId" : "putMachinesMachine_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"created_at\": \"2014-10-17 17:40:13\",\n  \"updated_at\": \"2014-10-17 23:58:46\",\n  \"switches\": [],\n  \"mac\": \"28:6e:d4:46:c4:25\",\n  \"tag\": {\n      \"builder\": \"huawei\"\n  },\n  \"location\": {\n      \"building\": \"E5\",\n      \"city\": \"beijing\"\n  },\n  \"ipmi_credentials\": {},\n  \"id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"The machine witch ID “$machine_id” cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "machines" ],
+        "summary" : "Delete a machine (admin only)",
+        "description" : "Delete a machine (admin only)",
+        "operationId" : "deleteMachinesMachine_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"created_at\": \"2014-10-17 17:40:13\",\n    \"updated_at\": \"2014-10-18 00:03:12\",\n    \"switches\": [],\n    \"mac\": \"28:6e:d4:46:c4:25\",\n    \"tag\": {\n        \"type\": \"ES200\"\n    },\n    \"location\": {\n        \"building\": \"E5\",\n        \"city\": \"beijing\"\n    },\n    \"ipmi_credentials\": {},\n    \"id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"The machine witch ID '$machine_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "machines" ],
+        "summary" : "updatge machine properties",
+        "description" : "updatge machine properties",
+        "operationId" : "patchMachinesMachine_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"created_at\": \"2014-10-17 17:40:13\",\n    \"updated_at\": \"2014-10-18 00:03:12\",\n    \"switches\": [],\n    \"mac\": \"28:6e:d4:46:c4:25\",\n    \"tag\": {\n        \"type\": \"ES200\"\n    },\n    \"location\": {\n        \"building\": \"E5\",\n        \"city\": \"beijing\"\n    },\n    \"ipmi_credentials\": {},\n    \"id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"The machine witch ID '$machine_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/machines/{machine_id}/action" : {
+      "post" : {
+        "tags" : [ "machines" ],
+        "summary" : "machine actions",
+        "description" : "machine actions",
+        "operationId" : "postMachinesMachine_idAction",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "tag example:\n\n{\n  \"created_at\": \"2014-10-17 17:40:13\",\n  \"updated_at\": \"2014-10-18 00:10:58\",\n  \"id\": 2,\n  \"switches\": [\n      {\n          \"switch_ip\": \"172.29.8.40\",\n          \"vlans\": [\n              88\n          ],\n          \"port\": \"4\"\n      }\n  ],\n  \"mac\": \"00:0c:29:2b:c9:d4\",\n  \"tag\": {\n      \"builder\": \"huawei\"\n  },\n  \"location\": {},\n  \"switch_ip\": \"172.29.8.40\",\n  \"ipmi_credentials\": {},\n  \"vlans\": [\n      88\n  ],\n  \"port\": \"4\"\n}\n\npoweron/ poweroff / reset is null example:\n\n{\n  \"status\": \"poweron 00:0c:29:2b:c9:d4 action sent\",\n}\n"
+            }
+          },
+          "400" : {
+            "description" : "The request could not be understood by the server due to malformed syntax",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"The machine haven't set IPMI info!\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"The machine witch ID '$machine_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/permissions" : {
+      "get" : {
+        "tags" : [ "permissions" ],
+        "summary" : "List all permissions",
+        "description" : "List all permissions",
+        "operationId" : "getPermissions",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "X-Auth-Header",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n    {\n        \"alias\": \"list permissions\",\n        \"description\": \"list all permissions\",\n        \"id\": 1,\n        \"name\": \"list_permissions\"\n    },\n]\n"
+            }
+          }
+        }
+      }
+    },
+    "/permissions/{permission_id}" : {
+      "get" : {
+        "tags" : [ "permissions" ],
+        "summary" : "List a specific permission info",
+        "description" : "List a specific permission info",
+        "operationId" : "getPermissionsPermission_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "permission_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n  {\n    \"alias\": \"list permissions\",\n    \"description\": \"list all permissions\",\n    \"id\": 1,\n    \"name\": \"list_permissions\"\n  }\n]\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  message: \"Cannot find the record in table Permission: {'id': '<permission_id>'}\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/proxy/{path}" : {
+      "get" : {
+        "tags" : [ "proxy" ],
+        "summary" : "proxy get request",
+        "description" : "proxy get request",
+        "operationId" : "getProxyPath",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "path",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "URL",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "x-example" : "http://10.145.88.211/api/proxy/users"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n    {\n        \"created_at\": \"2014-10-19 10:50:04\",\n        \"updated_at\": \"2014-10-19 10:50:04\",\n        \"email\": \"admin@huawei.com\",\n        \"is_admin\": true,\n        \"active\": true,\n        \"id\": 1\n    }\n]\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "proxy" ],
+        "summary" : "proxy post request",
+        "description" : "proxy post request",
+        "operationId" : "postProxyPath",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "path",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"subnet\": \"10.145.86.0/23\",\n  \"created_at\": \"2014-10-19 11:25:33\",\n  \"updated_at\": \"2014-10-19 11:25:33\",\n  \"name\": \"10.145.86.0/23\",\n  \"id\": 3\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "proxy" ],
+        "summary" : "proxy put request",
+        "description" : "proxy put request",
+        "operationId" : "putProxyPath",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "path",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"subnet\": \"10.145.84.0/23\",\n    \"created_at\": \"2014-10-19 11:25:33\",\n    \"updated_at\": \"2014-10-19 11:29:08\",\n    \"name\": \"10.145.84.0/23\",\n    \"id\": 3\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "proxy" ],
+        "summary" : "proxy delete request",
+        "description" : "proxy delete request",
+        "operationId" : "deleteProxyPath",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "path",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "URL",
+          "in" : "query",
+          "required" : false,
+          "type" : "string",
+          "x-example" : "http://10.145.88.211/api/proxy/switches/3"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"ip\": \"172.29.8.42\",\n    \"created_at\": \"2014-10-19 11:31:40\",\n    \"updated_at\": \"2014-10-19 11:33:46\",\n    \"state\": \"initialized\",\n    \"filters\": \"\",\n    \"credentials\": {\n        \"version\": \"2c\",\n        \"community\": \"private\"\n    },\n    \"id\": 3\n}\n"
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "proxy" ],
+        "summary" : "proxy patch request",
+        "description" : "proxy patch request",
+        "operationId" : "patchProxyPath",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "path",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"ip\": \"172.29.8.42\",\n    \"created_at\": \"2014-10-19 11:31:40\",\n    \"updated_at\": \"2014-10-19 11:33:46\",\n    \"state\": \"initialized\",\n    \"filters\": \"\",\n    \"credentials\": {\n        \"version\": \"2c\",\n        \"community\": \"private\"\n    },\n    \"id\": 3\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/subnets" : {
+      "get" : {
+        "tags" : [ "subnets" ],
+        "summary" : "Gets all subnetworks information",
+        "description" : "Gets all subnetworks information",
+        "operationId" : "getSubnets",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[{\n    \"updated_at\": \"2014-10-18 21:24:46\",\n    \"subnet\": \"10.145.88.0/23\",\n    \"created_at\": \"2014-10-18 21:24:46\",\n    \"id\": 1,\n    \"name\": \"10.145.88.0/23\"\n}]\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "subnets" ],
+        "summary" : "Creates one subnetwork",
+        "description" : "Creates one subnetwork",
+        "operationId" : "postSubnets",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"updated_at\": \"2014-10-18 21:24:46\",\n    \"subnet\": \"10.145.88.0/23\",\n    \"created_at\": \"2014-10-18 21:24:46\",\n    \"id\": 1,\n    \"name\": \"10.145.88.0/23\"\n}\n"
+            }
+          },
+          "400" : {
+            "description" : "The request could not be understood by the server due to malformed syntax",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Keyword '$somekey' cannot be recognized!\"\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Subnet already exists!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/subnets/{subnet_id}" : {
+      "get" : {
+        "tags" : [ "subnets" ],
+        "summary" : "Gets one subnetwork info",
+        "description" : "Gets one subnetwork info",
+        "operationId" : "getSubnetsSubnet_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "subnet_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"updated_at\": \"2014-10-18 21:24:46\",\n    \"subnet\": \"10.145.88.0/23\",\n    \"created_at\": \"2014-10-18 21:24:46\",\n    \"id\": 1,\n    \"name\": \"10.145.88.0/23\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Subnetwork with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "subnets" ],
+        "summary" : "set subnet properties",
+        "description" : "set subnet properties",
+        "operationId" : "putSubnetsSubnet_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "subnet_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"updated_at\": \"2014-10-18 21:44:17\",\n    \"subnet\": \"10.145.86.0/23\",\n    \"created_at\": \"2014-10-18 21:43:50\",\n    \"id\": 1,\n    \"name\": \"10.145.86.0/23\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Subnetwork with id 'some_id' cannot be found!\"\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"Subnet name already exists!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "subnets" ],
+        "summary" : "Deletes a subnetwork (owner,  admin only)",
+        "description" : "Deletes a subnetwork (owner,  admin only)",
+        "operationId" : "deleteSubnetsSubnet_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "subnet_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Subnetwork is in use by some interface. Cannot delete it.\"\n}\n\n\n{\n    \"message\": \"Subnetwork can only be deleted by creator or admin!\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"Subnetwork with id 'some_id' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/switchbatch" : {
+      "post" : {
+        "tags" : [ "switchbatch" ],
+        "summary" : "Batch switches. If switch ip already existed, switch data will be added in fail_switches list and return.",
+        "description" : "Batch switches. If switch ip already existed, switch data will be added in fail_switches list and return.",
+        "operationId" : "postSwitchbatch",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"switches\": [\n    {\n      \"vendor\": \"Huawei\",\n      \"ip\": \"10.145.8.10\",\n      \"created_at\": \"2015-05-04 16:13:34\",\n      \"updated_at\": \"2015-05-04 16:13:34\",\n      \"state\": \"initialized\",\n      \"filters\": \"\",\n        \"credentials\": {\n          \"version\": \"2c\",\n          \"community\": \"public\"\n        },\n      \"id\": 2\n    },\n    {\n      \"ip\": \"172.29.8.40\",\n      \"created_at\": \"2015-05-04 16:13:34\",\n      \"updated_at\": \"2015-05-04 16:13:34\",\n      \"state\": \"initialized\",\n      \"filters\": \"\",\n      \"credentials\": {},\n      \"id\": 3\n    }\n  ],\n  \"fail_switches\": [\n    {\n      \"ip\": \"172.29.8.40\"\n    }\n  ]\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/switches" : {
+      "get" : {
+        "tags" : [ "switches" ],
+        "summary" : "Lists switches",
+        "description" : "Lists switches",
+        "operationId" : "getSwitches",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n    {\n        \"ip\": \"172.29.8.40\",\n        \"created_at\": \"2014-10-17 17:28:06\",\n        \"updated_at\": \"2014-10-17 17:28:06\",\n        \"state\": \"initialized\",\n        \"filters\": \"\",\n        \"credentials\": {\n            \"version\": \"2c\",\n            \"community\": \"public\"\n        },\n        \"id\": 2\n    }\n]\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "switches" ],
+        "summary" : "Creates a switch",
+        "description" : "Creates a switch",
+        "operationId" : "postSwitches",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"ip\": \"172.29.8.40\",\n    \"created_at\": \"2014-10-17 17:28:06\",\n    \"updated_at\": \"2014-10-17 17:28:06\",\n    \"state\": \"initialized\",\n    \"filters\": \"\",\n    \"credentials\": {\n        \"version\": \"2c\",\n        \"community\": \"public\"\n    },\n    \"id\": 2\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"IP address '192.168.1.1' already exists\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/switches/machines" : {
+      "post" : {
+        "tags" : [ "switches" ],
+        "summary" : "Batch switch machines. If the machine is connected to other switch or switch does not exist, it will be added to fail_switches_machines and return. If machine is already existed, it will be added to duplicate_switches_machines.",
+        "description" : "Batch switch machines. If the machine is connected to other switch or switch does not exist, it will be added to fail_switches_machines and return. If machine is already existed, it will be added to duplicate_switches_machines.",
+        "operationId" : "postSwitchesMachines",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"duplicate_switches_machines\": [\n      {\n          \"mac\": \"a1:b2:c3:d4:e1:f6\",\n          \"port\": \"101\"\n      }\n  ],\n  \"switches_machines\": [\n      {\n          \"vlans\": [],\n          \"updated_at\": \"2015-05-07 10:55:12\",\n          \"created_at\": \"2015-05-07 10:55:12\",\n          \"switch_id\": 2,\n          \"id\": 1,\n          \"mac\": \"70:7b:e8:e2:72:21\",\n          \"tag\": {},\n          \"location\": {},\n          \"switch_ip\": \"10.145.8.10\",\n          \"ipmi_credentials\": {},\n          \"machine_id\": 1,\n          \"port\": \"204\",\n          \"switch_machine_id\": 1\n      },\n      {\n          \"vlans\": [],\n          \"updated_at\": \"2015-05-07 10:55:12\",\n          \"created_at\": \"2015-05-07 10:55:12\",\n          \"switch_id\": 2,\n          \"id\": 2,\n          \"mac\": \"a1:b2:c3:d4:e1:f6\",\n          \"tag\": {},\n          \"location\": {},\n          \"switch_ip\": \"10.145.8.10\",\n          \"ipmi_credentials\": {},\n          \"machine_id\": 2,\n          \"port\": \"101\",\n          \"switch_machine_id\": 2\n      },\n      {\n          \"vlans\": [],\n          \"updated_at\": \"2015-05-07 10:55:12\",\n          \"created_at\": \"2015-05-07 10:55:12\",\n          \"switch_id\": 3,\n          \"id\": 3,\n          \"mac\": \"a1:b2:c3:d4:e5:f9\",\n          \"tag\": {},\n          \"location\": {},\n          \"switch_ip\": \"172.29.8.40\",\n          \"ipmi_credentials\": {},\n          \"machine_id\": 3,\n          \"port\": \"121\",\n          \"switch_machine_id\": 3\n      }\n  ],\n  \"fail_switches_machines\": [\n      {\n          \"mac\": \"a1:b5:c3:d4:e5:f9\",\n          \"port\": \"131\"\n      },\n      {\n          \"mac\": \"a1:b2:c3:d4:e1:f6\",\n          \"port\": \"13\"\n      }\n  ]\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/switches/{id}/machines/{machine_id}" : {
+      "get" : {
+        "tags" : [ "switches" ],
+        "summary" : "Get machine of a specified switch",
+        "description" : "Get machine of a specified switch",
+        "operationId" : "getSwitchesIdMachinesMachine_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"vlans\": [\n        88\n    ],\n    \"updated_at\": \"2014-10-17 17:40:13\",\n    \"created_at\": \"2014-10-17 17:40:13\",\n    \"switch_id\": 2,\n    \"id\": 1,\n    \"mac\": \"28:6e:d4:46:c4:25\",\n    \"tag\": {},\n    \"location\": {},\n    \"switch_ip\": \"172.29.8.40\",\n    \"ipmi_credentials\": {},\n    \"machine_id\": 1,\n    \"port\": \"7\",\n    \"switch_machine_id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cannot find the record in table SwitchMachine: {'machine_id': 1000, 'switch_id': 2}\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "switches" ],
+        "summary" : "set machine property of a specified switch",
+        "description" : "set machine property of a specified switch",
+        "operationId" : "putSwitchesIdMachinesMachine_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"vlans\": [\n        88\n    ],\n    \"updated_at\": \"2014-10-17 17:40:13\",\n    \"created_at\": \"2014-10-17 17:40:13\",\n    \"switch_id\": 2,\n    \"id\": 1,\n    \"mac\": \"28:6e:d4:46:c4:25\",\n    \"tag\": {},\n    \"location\": {\n        \"building\": \"E5\"\n    },\n    \"switch_ip\": \"172.29.8.40\",\n    \"ipmi_credentials\": {},\n    \"machine_id\": 1,\n    \"port\": \"7\",\n    \"switch_machine_id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cannot find the record in table SwitchMachine: {'machine_id': 1000, 'switch_id': 2}\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "switches" ],
+        "summary" : "Delete a machine from a switch",
+        "description" : "Delete a machine from a switch",
+        "operationId" : "deleteSwitchesIdMachinesMachine_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"vlans\": [\n        88\n    ],\n    \"updated_at\": \"2014-10-17 17:40:13\",\n    \"created_at\": \"2014-10-17 17:40:13\",\n    \"switch_id\": 2,\n    \"id\": 1,\n    \"mac\": \"28:6e:d4:46:c4:25\",\n    \"tag\": {},\n    \"location\": {\n        \"building\": \"E5\",\n        \"city\": \"beijing\"\n    },\n    \"switch_ip\": \"172.29.8.40\",\n    \"ipmi_credentials\": {},\n    \"machine_id\": 1,\n    \"port\": \"7\",\n    \"switch_machine_id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n    \"message\": \"Cannot find the record in table SwitchMachine: {'machine_id': 1000, 'switch_id': 2}\"\n}\n"
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "switches" ],
+        "summary" : "update machine property of a specified switch",
+        "description" : "update machine property of a specified switch",
+        "operationId" : "patchSwitchesIdMachinesMachine_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "machine_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"vlans\": [\n        88\n    ],\n    \"updated_at\": \"2014-10-17 17:40:13\",\n    \"created_at\": \"2014-10-17 17:40:13\",\n    \"switch_id\": 2,\n    \"id\": 1,\n    \"mac\": \"28:6e:d4:46:c4:25\",\n    \"tag\": {},\n    \"location\": {\n        \"building\": \"E5\",\n        \"city\": \"beijing\"\n    },\n    \"switch_ip\": \"172.29.8.40\",\n    \"ipmi_credentials\": {},\n    \"machine_id\": 1,\n    \"port\": \"7\",\n    \"switch_machine_id\": 1\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cannot find the record in table SwitchMachine: {'machine_id': 1000, 'switch_id': 2}\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/switches/{switch_id}" : {
+      "get" : {
+        "tags" : [ "switches" ],
+        "summary" : "Lists a switch",
+        "description" : "Lists a switch",
+        "operationId" : "getSwitchesSwitch_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "switch_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"ip\": \"172.29.8.40\",\n    \"created_at\": \"2014-10-17 17:28:06\",\n    \"updated_at\": \"2014-10-17 17:28:06\",\n    \"state\": \"initialized\",\n    \"filters\": \"\",\n    \"credentials\": {\n        \"version\": \"2c\",\n        \"community\": \"public\"\n    },\n    \"id\": 2\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cannot find the switch which id is '1'.\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "switches" ],
+        "summary" : "Set the switch properties",
+        "description" : "Set the switch properties",
+        "operationId" : "putSwitchesSwitch_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "switch_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"ip\": \"172.29.8.40\",\n    \"created_at\": \"2014-10-17 17:28:06\",\n    \"updated_at\": \"2014-10-17 17:28:06\",\n    \"state\": \"initialized\",\n    \"filters\": \"\",\n    \"credentials\": {\n        \"version\": \"2c\",\n        \"community\": \"private\"\n    },\n    \"id\": 2\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cannot update the switch which id is '1'! The switch does not exists.\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "switches" ],
+        "summary" : "Delete switch",
+        "description" : "Delete switch",
+        "operationId" : "deleteSwitchesSwitch_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "switch_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"ip\": \"172.29.8.41\",\n    \"created_at\": \"2014-10-17 17:45:17\",\n    \"updated_at\": \"2014-10-17 17:45:17\",\n    \"state\": \"initialized\",\n    \"filters\": \"\",\n    \"credentials\": {\n        \"version\": \"2c\",\n        \"community\": \"public\"\n    },\n    \"id\": 3\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cannot find the record in table Switch: {'id': 4}\"\n}\n"
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "switches" ],
+        "summary" : "Updates the switch properties",
+        "description" : "Updates the switch properties",
+        "operationId" : "patchSwitchesSwitch_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "switch_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"ip\": \"172.29.8.40\",\n    \"created_at\": \"2014-10-17 17:28:06\",\n    \"updated_at\": \"2014-10-17 17:28:06\",\n    \"state\": \"initialized\",\n    \"filters\": \"\",\n    \"credentials\": {\n        \"version\": \"3\",\n        \"community\": \"public\"\n    },\n    \"id\": 2\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"Cannot update the switch which id is '1'! The         switch does not exists.\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/switches/{switch_id}/action" : {
+      "post" : {
+        "tags" : [ "switches" ],
+        "operationId" : "postSwitchesSwitch_idAction",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "switch_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "add_machines:      \n [\n     {\n         \"vlans\": [],\n         \"updated_at\": \"2014-10-17 17:56:44\",\n         \"created_at\": \"2014-10-17 17:56:44\",\n         \"switch_id\": 3,\n         \"id\": 1,\n         \"mac\": \"28:6e:d4:46:c4:25\",\n         \"tag\": {},\n         \"location\": {},\n         \"switch_ip\": \"172.29.8.41\",\n         \"ipmi_credentials\": {},\n         \"machine_id\": 1,\n         \"port\": \"10\",\n         \"switch_machine_id\": 203\n     }\n ]\n \nremove_machines:\n[]               \nset_machines:             \n[\n   {\n       \"vlans\": [],\n       \"updated_at\": \"2014-10-17 17:56:44\",\n       \"created_at\": \"2014-10-17 17:56:44\",\n       \"switch_id\": 3,\n       \"id\": 1,\n       \"mac\": \"28:6e:d4:46:c4:25\",\n       \"tag\": {},\n       \"location\": {},\n       \"switch_ip\": \"172.29.8.41\",\n       \"ipmi_credentials\": {},\n       \"machine_id\": 1,\n       \"port\": \"10\",\n       \"switch_machine_id\": 203\n   }\n]\n"
+            }
+          },
+          "202" : {
+            "description" : "The request has been accepted for processing, but the processing has not been completed",
+            "examples" : {
+              "application/json" : "find_machines:\n {\n     \"status\": \"action {'find_machines': None} sent\",\n     \"details\": {}\n }\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"Cannot update the switch which id is '1'! The         switch does not exists.\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/switches/{switch_id}/machines" : {
+      "get" : {
+        "tags" : [ "switches" ],
+        "summary" : "Lists machines for a specified switch",
+        "description" : "Lists machines for a specified switch",
+        "operationId" : "getSwitchesSwitch_idMachines",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "switch_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "port",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "portStart",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "portEnd",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "portRange",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "PortPrefix",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "PortSuffix",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "vlans",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "mac",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "tag",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "location",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "Get:\n[\n    {\n        \"vlans\": [],\n        \"updated_at\": \"2014-10-17 18:02:21\",\n        \"created_at\": \"2014-10-17 18:02:21\",\n        \"switch_id\": 3,\n        \"id\": 1,\n        \"mac\": \"28:6e:d4:46:c4:25\",\n        \"tag\": {},\n        \"location\": {},\n        \"switch_ip\": \"172.29.8.41\",\n        \"ipmi_credentials\": {},\n        \"machine_id\": 1,\n        \"port\": \"10\",\n        \"switch_machine_id\": 204\n    }\n]\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "switches" ],
+        "summary" : "Manually add a machine",
+        "description" : "Manually add a machine",
+        "operationId" : "postSwitchesSwitch_idMachines",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "switch_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n  \"id\": 1,\n  \"mac\": \"28:6e:d4:47:c8:6c\",\n  \"vlan\": 1,\n  \"port\": \"10\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"The switch does not exists.\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/users" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Lists information for all users",
+        "description" : "Lists information for all users",
+        "operationId" : "getUsers",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "is_admin",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "active",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "X-Auth-Header",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n  {\n    \"id\": 1,\n    \"email\": \"someuser@email.com\",\n    \"first_name\": \"\",\n    \"last_name\": \"\",\n    \"is_admin\": false,\n    \"active\": true,\n    \"created_at\": \"--timestamp---\",\n    \"last_login_at\": \"--timestamp---\"\n  },\n]\n"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Creates a user(admin only)",
+        "description" : "Creates a user(admin only)",
+        "operationId" : "postUsers",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "X-Auth-Header",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The request has been fulfilled and resulted in a new resource being created",
+            "examples" : {
+              "application/json" : "{\n  \"id\": 3,\n  \"email\": \"user3@someemail.com\",\n  \"first_name\": \"\",\n  \"last_name\": \"\",\n  \"is_admin\": false,\n  \"active\": true,\n  \"created_at\": \"--timestamp---\",\n  \"last_login_at\": \"--timestamp---\"\n}\n"
+            }
+          },
+          "400" : {
+            "description" : "The request could not be understood by the server due to malformed syntax",
+            "examples" : {
+              "application/json" : "{\n  \"bad request\"\n}\n"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it",
+            "examples" : {
+              "application/json" : "{\n  \"forbidden\"\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"The user already exists!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/users/login" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Login",
+        "description" : "Login",
+        "operationId" : "postUsersLogin",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"expire_timestamp\": \"2014-10-06 13:25:23\",\n    \"token\": \"$1$c1ZWGYEn$WTg57cnP4pEwd9JMJ7beS/\",\n    \"user_id\": 1,\n    \"id\": 3\n}\n"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication",
+            "examples" : {
+              "application/json" : "{\n    \"type\": \"unauthorized\",\n    \"message\": \"Either email or password is wrong!\"\n}\n"
+            }
+          },
+          "403" : {
+            "description" : "The server understood the request, but is refusing to fulfill it",
+            "examples" : {
+              "application/json" : "{\n    \"type\": \"userDisabled\",\n    \"message”: \"User is disabled !\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/users/logout" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Logout",
+        "description" : "Logout",
+        "operationId" : "postUsersLogout",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n    {\n        \"expire_timestamp\": \"2014-10-17 18:30:29\",\n        \"token\": \"$1$AFqIS5Kn$1ASgOkPv.G1a7pkRRHKY.0\",\n        \"user_id\": 1,\n        \"id\": 1\n    }\n]\n"
+            }
+          },
+          "401" : {
+            "description" : "The request requires user authentication",
+            "examples" : {
+              "application/json" : "{\n     \"message\": \"invalid user token: $1$AFqIS5Kn$1ASgOkPv.G1a7pkRRHKY.0\",\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/users/token" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Authenticates and generates a token",
+        "description" : "Authenticates and generates a token",
+        "operationId" : "postUsersToken",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"expire_timestamp\": \"2014-10-06 13:25:23\",\n    \"token\": \"$1$c1ZWGYEn$WTg57cnP4pEwd9JMJ7beS/\",\n    \"user_id\": 1,\n    \"id\": 3\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n    \"type\": \"unauthorized\",\n    \"message\": \"Either email or password is wrong!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Lists information for a specific user",
+        "description" : "Lists information for a specific user",
+        "operationId" : "getUsersUser_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Auth-Header",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n   \"id\": 1,\n   \"email\": \"someuser@email.com\",\n   \"first_name\": \"\",\n   \"last_name\": \"\",\n   \"is_admin\": false,\n   \"active\": true,\n   \"created_at\": \"2014-03-25 12:00:00\",\n   \"last_login_at\": \"2014-03-25 12:05:00\"\n}\n"
+            }
+          },
+          "404" : {
+            "description" : "The server has not found anything matching the request URI",
+            "examples" : {
+              "application/json" : "{\n  \"message\": \"The user with id 'some--id--' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "users" ],
+        "summary" : "Updates user’s information",
+        "description" : "Updates user’s information",
+        "operationId" : "putUsersUser_id",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Auth-Header",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "The request has been fulfilled and resulted in a new resource being created",
+            "examples" : {
+              "application/json" : "{\n   \"id\": 3,\n   \"email\": \"user3@someemail.com\",\n   \"first_name\": \"\",\n   \"last_name\": \"\",\n   \"is_admin\": false,\n   \"active\": true\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"The user with id 'some--id--' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "users" ],
+        "summary" : "Deletes a user(admin only)",
+        "description" : "Deletes a user(admin only)",
+        "operationId" : "deleteUsersUser_id",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "X-Auth-Header",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "{\n    \"id\": 3,\n    \"email\": \"user3@someemail.com\",\n    \"first_name\": \"\",\n    \"last_name\": \"\",\n    \"is_admin\": false,\n    \"active\": true\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n   \"message\": \"The user cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/action" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Adds/Removes permissions, Enable/Disable a user (admin only)",
+        "description" : "Adds/Removes permissions, Enable/Disable a user (admin only)",
+        "operationId" : "postUsersUser_idAction",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "Add permission:\n\n[\n  {\n      \"created_at\": \"2014-10-17 16:28:21\",\n      \"user_id\": 1,\n      \"description\": \"list all permissions\",\n      \"permission_id\": 1,\n      \"updated_at\": \"2014-10-17 16:28:21\",\n      \"alias\": \"list permissions\",\n      \"id\": 1,\n      \"name\": \"list_permissions\"\n  }\n]\n\nRemove permission:\n\n[\n    {\n        \"created_at\": \"2014-10-17 16:28:21\",\n        \"user_id\": 1,\n        \"description\": \"list all permissions\",\n        \"permission_id\": 1,\n        \"updated_at\": \"2014-10-17 16:28:21\",\n        \"alias\": \"list permissions\",\n        \"id\": 1,\n        \"name\": \"list_permissions\"\n    }\n]\n\nSet Permission:\n\n[\n    {\n        \"created_at\": \"2014-10-17 16:28:21\",\n        \"user_id\": 1,\n        \"description\": \"list all permissions\",\n        \"permission_id\": 1,\n        \"updated_at\": \"2014-10-17 16:28:21\",\n        \"alias\": \"list permissions\",\n        \"id\": 1,\n        \"name\": \"list_permissions\"\n    }\n]\n\nEnable user:\n\n{\n    \"created_at\": \"2014-10-17 16:28:21\",\n    \"updated_at\": \"2014-10-17 16:28:21\",\n    \"email\": \"admin@huawei.com\",\n    \"is_admin\": true,\n    \"active\": true,\n    \"id\": 1\n}\n\nDisable user:\n\n{\n    \"created_at\": \"2014-10-17 16:28:21\",\n    \"updated_at\": \"2014-10-17 16:28:21\",\n    \"email\": \"admin@huawei.com\",\n    \"is_admin\": true,\n    \"active\": true,\n    \"id\": 1\n}\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n   \"type\": \"itemNotFound\",\n   \"message\": \"The user cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/permissions" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Lists permissions for a specified user",
+        "description" : "Lists permissions for a specified user",
+        "operationId" : "getUsersUser_idPermissions",
+        "consumes" : [ ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "user_id",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "Access-token",
+          "in" : "header",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "$1$fCD2zLIa$hikkNkqDe0qAXgKHDzw0E0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded",
+            "examples" : {
+              "application/json" : "[\n    {\n        \"created_at\": \"2014-10-17 16:28:21\",\n        \"user_id\": 1,\n        \"description\": \"list all permissions\",\n        \"permission_id\": 1,\n        \"updated_at\": \"2014-10-17 16:28:21\",\n        \"alias\": \"list permissions\",\n        \"id\": 1,\n        \"name\": \"list_permissions\"\n    }\n]\n"
+            }
+          },
+          "409" : {
+            "description" : "The request could not be completed due to a conflict with the current state of the resource",
+            "examples" : {
+              "application/json" : "{\n   \"type\": \"itemNotFound\",\n   \"message\": \"The user with id 'some--id--' cannot be found!\"\n}\n"
+            }
+          }
+        }
+      }
+    }
+  }
+
+}
